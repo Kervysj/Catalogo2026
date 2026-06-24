@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="description" content="Catálogo de productos exclusivos" />
+  <title>Catálogo</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-name">MI TIENDA</span>
+        <span class="brand-tagline">Colección exclusiva</span>
+      </div>
+      <button class="cart-btn" id="cartBtn" aria-label="Ver carrito">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Nueva temporada</p>
+      <h1 class="hero-title">Todo lo que<br/><em>necesitas,</em><br/>aquí.</h1>
+    </div>
+  </section>
+
+  <!-- CATEGORÍAS -->
+  <nav class="categories" id="categoryNav" aria-label="Filtrar por categoría">
+    <button class="cat-btn active" data-cat="Todos">Todos</button>
+  </nav>
+
+  <!-- BUSCADOR -->
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" type="search" placeholder="Buscar producto…" aria-label="Buscar" />
+  </div>
+
+  <!-- ESTADO: cargando / vacío / error -->
+  <div class="state-msg" id="stateMsg">
+    <div class="spinner"></div>
+    <p>Cargando catálogo…</p>
+  </div>
+
+  <!-- GRID DE PRODUCTOS -->
+  <main class="product-grid" id="productGrid" aria-label="Productos"></main>
+
+  <!-- ====== CARRITO PANEL ====== -->
+  <aside class="cart-panel" id="cartPanel" aria-hidden="true">
+    <div class="cart-header">
+      <h2>Tu pedido</h2>
+      <button class="close-cart" id="closeCart" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">$0</strong>
+      </div>
+
+      <!-- DATOS DEL CLIENTE -->
+      <div class="client-form">
+        <input class="form-input" id="clientName" type="text" placeholder="Tu nombre" required />
+        <input class="form-input" id="clientPhone" type="tel" placeholder="Tu número de WhatsApp" />
+      </div>
+
+      <button class="send-btn" id="sendBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.029 18.88a9.896 9.896 0 01-4.744-1.21l-3.404.893.91-3.326A9.9 9.9 0 012.1 12c0-5.478 4.451-9.929 9.929-9.929S21.958 6.522 21.958 12 17.507 21.958 12.029 21.958z"/>
+        </svg>
+        Enviar pedido por WhatsApp
+      </button>
+    </div>
+  </aside>
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- TOAST NOTIFICACIONES -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
