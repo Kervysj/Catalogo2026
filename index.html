@@ -253,7 +253,6 @@ async function loadProducts() {
     if (!data.success) throw new Error(data.error || 'Error');
     allProducts = data.products;
   } catch(e) {
-    // Si falla (CORS local, etc) usar demo
     allProducts = DEMO_PRODUCTS;
   }
   buildCategories();
@@ -416,7 +415,16 @@ $('sendBtn').addEventListener('click', async () => {
   const phone = $('clientPhone').value.trim();
   if (!name) { showToast('Por favor ingresa tu nombre'); $('clientName').focus(); return; }
   const total = items.reduce((s,i) => s + i.product.precio*i.qty, 0);
-  const lines = items.map(({product:p,qty}) => `• ${p.nombre} x${qty} — ${CONFIG.CURRENCY}${fmt(p.precio*qty)}`);
+
+  // ============================================================
+  // CAMBIO 1: Cada producto ahora incluye su link de imagen
+  // Antes: `• ${p.nombre} x${qty} — ${CONFIG.CURRENCY}${fmt(p.precio*qty)}`
+  // Ahora: agrega una línea con el link de la foto debajo del producto
+  // ============================================================
+  const lines = items.map(({product:p,qty}) =>
+    `• ${p.nombre} x${qty} — ${CONFIG.CURRENCY}${fmt(p.precio*qty)}${p.url_imagen ? '\n  📷 ' + p.url_imagen : ''}`
+  );
+
   const msg = [
     `🛍️ *Nuevo pedido — ${CONFIG.STORE_NAME}*`,``,
     `👤 Cliente: ${name}${phone?`\n📱 WhatsApp: ${phone}`:''}`,``,
@@ -424,14 +432,31 @@ $('sendBtn').addEventListener('click', async () => {
     `💰 *Total: ${CONFIG.CURRENCY}${fmt(total)}*`,``,
     `_Pedido desde el catálogo web_`
   ].join('\n');
-  // Guardar en Sheets
+
+  // ============================================================
+  // CAMBIO 2: El fetch POST ahora incluye url_imagen en cada item
+  // Antes: items.map(({product:p,qty})=>({id:p.id,nombre:p.nombre,qty,precio:p.precio}))
+  // Ahora: se agrega url_imagen: p.url_imagen
+  // ============================================================
   try {
     await fetch(CONFIG.SCRIPT_URL, {
       method:'POST',
-      body: JSON.stringify({action:'saveOrder',cliente:name,telefono:phone,
-        items:items.map(({product:p,qty})=>({id:p.id,nombre:p.nombre,qty,precio:p.precio})),total})
+      body: JSON.stringify({
+        action: 'saveOrder',
+        cliente: name,
+        telefono: phone,
+        items: items.map(({product:p,qty}) => ({
+          id: p.id,
+          nombre: p.nombre,
+          qty,
+          precio: p.precio,
+          url_imagen: p.url_imagen   // ← CAMBIO 2: imagen incluida
+        })),
+        total
+      })
     });
   } catch(_){}
+
   window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
   cart = {};
   updateCartUI();
