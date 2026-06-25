@@ -424,35 +424,20 @@ $('sendBtn').addEventListener('click', async () => {
     `💰 *Total: ${CONFIG.CURRENCY}${fmt(total)}*`,``,
     `_Pedido desde el catálogo web_`
   ].join('\n');
-
-
   // Guardar en Sheets
-
   try {
     await fetch(CONFIG.SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'saveOrder',
-        cliente: name,
-        telefono: phone,
-        items: items.map(({ product: p, qty }) => ({
-          id: p.id,
-          nombre: p.nombre,
-          qty: qty,
-          precio: p.precio,
-          url_imagen: p.url_imagen // <--- Esta es la línea que faltaba
-        })),
-        total: total
-      })
+      method:'POST',
+      body: JSON.stringify({action:'saveOrder',cliente:name,telefono:phone,
+        items:items.map(({product:p,qty})=>({id:p.id,nombre:p.nombre,qty,precio:p.precio})),total})
     });
-  } catch (_) {}
-
+  } catch(_){}
   window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
   cart = {};
   updateCartUI();
   closeCartPanel();
   showToast('¡Pedido enviado!');
-
+});
 
 // ── PANEL CARRITO ──
 $('cartBtn').addEventListener('click', openCartPanel);
